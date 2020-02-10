@@ -1,22 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { useQuery } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
 // import ReactTable from 'react-table-v6'
 import 'react-table-v6/react-table.css'
 import PersonCard from '../PersonCard/PersonCard'
 import './PersonList.css'
-
-const FETCH_PEOPLE = gql`
-	{
-		Person {
-			name
-			birthDate
-			gender
-			phoneNumber
-			email
-		}
-	}
-`
+import axios from 'axios'
 
 const columns = [
 	{
@@ -41,27 +28,42 @@ const columns = [
 	}
 ]
 
+var config = {
+    headers: {'Access-Control-Allow-Origin': '*'}
+};
+
 const PersonList = () => {
-	const { loading, error, data } = useQuery(FETCH_PEOPLE)
 	const [peopleData, setPeopleData] = useState([])
+	const [fullPeopleData, setFullPeopleData] = useState([])
 	const [filter, setFilter] = useState('')
 
 	useEffect(() => {
-		if(!data) return
-		setPeopleData(data.Person.filter(person => person.name.toLowerCase().includes(filter.toLowerCase())))
-	}, [filter, data])
+		// Make a request for a user with a given ID
+		axios
+			.get('http://localhost:3000/', config)
+			.then(response => {
+				// handle success
+				setFullPeopleData(response.data)
+			})
+			.catch(error => {
+				// handle error
+				console.error(error)
+			})
+	}, [])
 
-	if (loading) return <p> Loading... </p>
-	if (error) return <p> Something went wrong... </p>
+	useEffect(() => {
+		const filteredPeople = fullPeopleData.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
+		setPeopleData(filteredPeople)
+	}, [filter, fullPeopleData])
 
 	return (
 		<div>
 			<div className='header'>
-				<input onChange={e => setFilter(e.target.value)}/>
+				<input onChange={e => setFilter(e.target.value)} />
 			</div>
 			<div className='cardsContainer'>
 				{peopleData.map(person => (
-					<PersonCard key={person.name} person={person}/>
+					<PersonCard key={person.name} person={person} />
 				))}
 				{/* <ReactTable data={data.Person} columns={columns} /> */}
 			</div>

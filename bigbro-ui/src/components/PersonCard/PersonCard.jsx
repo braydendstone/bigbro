@@ -19,7 +19,7 @@ const PersonCard = ({ person }) => {
 				<Typography color='textSecondary'>{person.email}</Typography>
 			</CardContent>
 			<CardActions>
-				<TagManager person={person}/>
+				{/* <TagManager person={person}/> */}
 			</CardActions>
 		</Card>
 	)

@@ -1,5 +1,12 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Color Palette
+- 2d132c
+- 801336
+- c72c41
+- ee4540
+![alt text](./palette.png "Color Palette")
+
 ## Available Scripts
 
 In the project directory, you can run:

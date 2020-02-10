@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+var cors = require('cors')
 var neo4j = require('neo4j-driver')
 
 const dotenv = require('dotenv')
@@ -9,6 +10,8 @@ var driver = neo4j.driver(
 	'bolt://localhost:7687',
 	neo4j.auth.basic(process.env.NEO4J_USERNAME, process.env.NEO4J_PASSWORD)
 )
+
+app.use(cors());
 
 app.get('/', (req, res) => {
 	let people = []
