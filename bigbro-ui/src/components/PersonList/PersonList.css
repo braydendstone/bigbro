@@ -1,0 +1,22 @@
+.UserList {
+  text-align: left;
+}
+
+.cardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.header {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  padding: 50px;
+  background-color: #333;
+  color: #fff;
+}
+
+input {
+  height: 20px;
+}
