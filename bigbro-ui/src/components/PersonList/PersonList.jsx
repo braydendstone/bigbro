@@ -43,7 +43,7 @@ const PersonList = () => {
 			.get('http://localhost:3000/', config)
 			.then(response => {
 				// handle success
-				setFullPeopleData(response.data)
+				setFullPeopleData(response.data || [])
 			})
 			.catch(error => {
 				// handle error
@@ -52,6 +52,7 @@ const PersonList = () => {
 	}, [])
 
 	useEffect(() => {
+		console.log(fullPeopleData)
 		const filteredPeople = fullPeopleData.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 		setPeopleData(filteredPeople)
 	}, [filter, fullPeopleData])

@@ -8,19 +8,38 @@ import Typography from '@material-ui/core/Typography'
 const PersonCard = ({ person }) => {
 	if (!person) return <div>Loading</div>
 	return (
-		<Card style={{width: 275, margin: 20}}>
+		<Card
+			style={{
+				width: 275,
+				margin: 20,
+				backgroundColor: '#333333',
+				color: '#ffffff',
+				borderLeft: '1px #ee4540 solid'
+			}}
+		>
 			<CardContent>
-				<Typography variant='h5' component='h2'>
-					{person.name}
+				<Typography
+					variant='h6'
+					component='h2'
+					color='#ffffff'
+					align='left'
+					nowrap
+				>
+					{person.name.split(',')[1] + ' ' + person.name.split(',')[0]}
 				</Typography>
-				<Typography color='textSecondary' gutterBottom>
+				<Typography
+					color='textSecondary'
+					gutterBottom
+					color='#ee4540'
+					align='left'
+				>
 					{person.phoneNumber}
 				</Typography>
-				<Typography color='textSecondary'>{person.email}</Typography>
+				<Typography color='textSecondary' color='#ee4540' align='left'>
+					{person.email}
+				</Typography>
 			</CardContent>
-			<CardActions>
-				{/* <TagManager person={person}/> */}
-			</CardActions>
+			<CardActions>{/* <TagManager person={person}/> */}</CardActions>
 		</Card>
 	)
 }
