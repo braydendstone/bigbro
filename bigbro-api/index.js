@@ -13,11 +13,11 @@ var driver = neo4j.driver(
 
 app.use(cors());
 
-app.get('/', (req, res) => {
+app.get('/people', (req, res) => {
 	let people = []
 	let session = driver.session()
 	session
-		.run('MATCH (n:Person) return n{.*}')
+		.run('MATCH (n:Person)-[:HAS_TAG]->(t:Tag) return n{.*, tags: collect(t{.*})}')
 		.then(result => {
 			people = result.records.map(record => record._fields[0])
 			res.send(people)
@@ -28,4 +28,34 @@ app.get('/', (req, res) => {
 		.then(() => session.close())
 })
 
-app.listen(3000, () => console.log(`Gator app listening on port 3000!`))
+app.post('/people/tag', (req, res) => {
+	let people = []
+	let session = driver.session()
+	session
+		.run(`MATCH (n:Person {id: ${req.personId}}) MERGE (t:Tag {name: ${req.tagName}, data: ${req.tagDate}})<-[:HAS_TAG]-(p)`)
+		.then(result => {
+			people = result.records.map(record => record._fields[0])
+			res.send(people)
+		})
+		.catch(error => {
+			console.log(error)
+		})
+		.then(() => session.close())
+})
+
+app.get('/tags', (req, res) => {
+	let people = []
+	let session = driver.session()
+	session
+		.run('MATCH (t:Tag) return t{.*}')
+		.then(result => {
+			people = result.records.map(record => record._fields[0])
+			res.send(people)
+		})
+		.catch(error => {
+			console.log(error)
+		})
+		.then(() => session.close())
+})
+
+app.listen(3000, () => console.log(`BigBro app listening on port 3000!`))
