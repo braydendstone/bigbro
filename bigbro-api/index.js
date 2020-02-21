@@ -17,7 +17,7 @@ app.get('/people', (req, res) => {
 	let people = []
 	let session = driver.session()
 	session
-		.run('MATCH (n:Person)-[:HAS_TAG]->(t:Tag) return n{.*, tags: collect(t{.*})}')
+		.run(`MATCH (n:Person) OPTIONAL MATCH (n)-[:HAS_TAG]->(t:Tag) return n{.*, tags: collect(t{.*})}`)
 		.then(result => {
 			people = result.records.map(record => record._fields[0])
 			res.send(people)
@@ -29,7 +29,6 @@ app.get('/people', (req, res) => {
 })
 
 app.post('/people/tag', (req, res) => {
-	let people = []
 	let session = driver.session()
 	session
 		.run(`MATCH (n:Person {id: ${req.personId}}) MERGE (t:Tag {name: ${req.tagName}, data: ${req.tagDate}})<-[:HAS_TAG]-(p)`)
@@ -44,13 +43,13 @@ app.post('/people/tag', (req, res) => {
 })
 
 app.get('/tags', (req, res) => {
-	let people = []
+	let tags = []
 	let session = driver.session()
 	session
 		.run('MATCH (t:Tag) return t{.*}')
 		.then(result => {
-			people = result.records.map(record => record._fields[0])
-			res.send(people)
+			tags = result.records.map(record => record._fields[0])
+			res.send(tags)
 		})
 		.catch(error => {
 			console.log(error)

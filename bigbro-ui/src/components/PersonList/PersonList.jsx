@@ -40,7 +40,7 @@ const PersonList = () => {
 	useEffect(() => {
 		// Make a request for a user with a given ID
 		axios
-			.get('http://localhost:3000/', config)
+			.get('http://localhost:3000/people/', config)
 			.then(response => {
 				// handle success
 				setFullPeopleData(response.data || [])
