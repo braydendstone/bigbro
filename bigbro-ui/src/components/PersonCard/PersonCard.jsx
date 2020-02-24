@@ -4,8 +4,9 @@ import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+import TagManager from '../TagManager/TagManager'
 
-const PersonCard = ({ person }) => {
+const PersonCard = ({ person, tagOptions }) => {
 	if (!person) return <div>Loading</div>
 	return (
 		<Card
@@ -18,28 +19,16 @@ const PersonCard = ({ person }) => {
 			}}
 		>
 			<CardContent>
-				<Typography
-					variant='h6'
-					component='h2'
-					color='#ffffff'
-					align='left'
-					nowrap
-				>
+				<Typography variant='h6' component='h2' color='#ffffff' align='left' nowrap>
 					{person.name.split(',')[1] + ' ' + person.name.split(',')[0]}
 				</Typography>
-				<Typography
-					color='textSecondary'
-					gutterBottom
-					color='#ee4540'
-					align='left'
-				>
+				<Typography color='textSecondary' gutterBottom color='#ee4540' align='left'>
 					{person.phoneNumber}
 				</Typography>
-				<Typography color='textSecondary' color='#ee4540' align='left'>
-					{person.email}
-				</Typography>
 			</CardContent>
-			<CardActions>{/* <TagManager person={person}/> */}</CardActions>
+			<CardActions>
+				<TagManager person={person} tagOptions={tagOptions}/>
+			</CardActions>
 		</Card>
 	)
 }

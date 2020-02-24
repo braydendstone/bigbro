@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, createContext } from 'react'
 // import ReactTable from 'react-table-v6'
 import 'react-table-v6/react-table.css'
 import PersonCard from '../PersonCard/PersonCard'
@@ -33,8 +33,10 @@ var config = {
 };
 
 const PersonList = () => {
+
 	const [peopleData, setPeopleData] = useState([])
 	const [fullPeopleData, setFullPeopleData] = useState([])
+	const [allTags, setAllTags] = useState([])
 	const [filter, setFilter] = useState('')
 
 	useEffect(() => {
@@ -47,6 +49,13 @@ const PersonList = () => {
 			})
 			.catch(error => {
 				// handle error
+				console.error(error)
+			})
+
+		axios
+			.get('http://localhost:3000/tags', config).then(response => {
+				setAllTags(response.data || [])
+			}).catch(error => {
 				console.error(error)
 			})
 	}, [])
@@ -64,7 +73,7 @@ const PersonList = () => {
 			</div>
 			<div className='cardsContainer'>
 				{peopleData.map(person => (
-					<PersonCard key={person.name} person={person} />
+					<PersonCard key={person.name} person={person} tagOptions={allTags}/>
 				))}
 				{/* <ReactTable data={data.Person} columns={columns} /> */}
 			</div>
