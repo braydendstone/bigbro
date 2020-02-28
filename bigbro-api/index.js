@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 var cors = require('cors')
+const moment = require('moment')
 var neo4j = require('neo4j-driver')
 
 const dotenv = require('dotenv')
@@ -29,17 +30,21 @@ app.get('/people', (req, res) => {
 })
 
 app.post('/people/tag', (req, res) => {
-	let session = driver.session()
-	session
-		.run(`MATCH (n:Person {id: ${req.personId}}) MERGE (t:Tag {name: ${req.tagName}, data: ${req.tagDate}})<-[:HAS_TAG]-(p)`)
-		.then(result => {
-			people = result.records.map(record => record._fields[0])
-			res.send(people)
-		})
-		.catch(error => {
-			console.log(error)
-		})
-		.then(() => session.close())
+	if(!req.color) {
+		req.color = "#" + Math.random().toString(16).slice(2, 8)
+	}
+	console.log(req)
+	// let session = driver.session()
+	// session
+	// 	.run(`MATCH (n:Person {id: ${req.personId}}) MERGE (t:Tag {name: ${req.name}, data: ${moment().toString()}})<-[:HAS_TAG]-(p)`)
+	// 	.then(result => {
+	// 		people = result.records.map(record => record._fields[0])
+	// 		res.send(people)
+	// 	})
+	// 	.catch(error => {
+	// 		console.log(error)
+	// 	})
+	// 	.then(() => session.close())
 })
 
 app.get('/tags', (req, res) => {

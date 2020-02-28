@@ -1,13 +1,38 @@
 import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import { Button, TextField } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete'
 import './TagManager.css'
 
-const filter = createFilterOptions();
+const useStyles = makeStyles({
+	tagInput: {
+	  backgroundColor: 'white',
+	  width: '70%',
+	  borderRadius: '5px'
+	},
+  });
+
+const filter = createFilterOptions()
+
+var config = {
+    headers: {'Access-Control-Allow-Origin': '*'}
+};
 
 const TagManager = ({ person, tagOptions }) => {
 	const [addingTag, setAddingTag] = useState(false)
 	const [tagInput, setTagInput] = useState('')
+	const classes =useStyles()
+
+	const saveTag = () => {
+		axios
+		.get('http://localhost:3000/person/tag', {...tagInput, personId: person.Id}, config).then(response => {
+			console.log("success :)")
+			setAddingTag(false)
+		}).catch(error => {
+			console.error(error)
+		})
+	}
 
 	return (
 		<div className='tags'>
@@ -27,16 +52,14 @@ const TagManager = ({ person, tagOptions }) => {
 						Add Tag
 					</Button>
 				) : (
-					<div style={{ width: '100%' }}>
+					<div style={{ width: '90%', display: 'flex' }}>
 						<Autocomplete
 							onChange={(event, newValue) => {
 								if (newValue && newValue.inputValue) {
-									setTagInput(newValue.inputValue)
-
+									setTagInput({name: newValue.inputValue})
 									return
 								}
-
-								setTagInput(newValue)
+								setTagInput({name: newValue})
 							}}
 							filterOptions={(options, params) => {
 								const filtered = filter(options, params)
@@ -65,8 +88,12 @@ const TagManager = ({ person, tagOptions }) => {
 							renderOption={option => option.name}
 							style={{ width: 200 }}
 							freeSolo
-							renderInput={params => <TextField {...params} label='Free solo with text demo' variant='outlined' />}
+							renderInput={params => <TextField {...params} className={classes.tagInput} label='Tag' variant='filled' />}
 						/>
+
+						<Button style={{ color: '#fff', width: '30%', backgroundColor: '#ee4540' }} onClick={() => saveTag()}>
+							Add
+						</Button>
 					</div>
 				)}
 			</div>
