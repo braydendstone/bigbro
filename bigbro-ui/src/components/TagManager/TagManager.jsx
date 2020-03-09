@@ -16,7 +16,8 @@ const useStyles = makeStyles({
 const filter = createFilterOptions()
 
 var config = {
-    headers: {'Access-Control-Allow-Origin': '*'}
+	headers: {'Access-Control-Allow-Origin': '*'},
+	'content-type': 'application/json'
 };
 
 const TagManager = ({ person, tagOptions }) => {
@@ -25,8 +26,9 @@ const TagManager = ({ person, tagOptions }) => {
 	const classes =useStyles()
 
 	const saveTag = () => {
+		console.log({...tagInput})
 		axios
-		.get('http://localhost:3000/person/tag', {...tagInput, personId: person.Id}, config).then(response => {
+		.post('http://localhost:3000/people/tag', {...tagInput, personId: person.Id}, config).then(response => {
 			console.log("success :)")
 			setAddingTag(false)
 		}).catch(error => {
@@ -42,6 +44,7 @@ const TagManager = ({ person, tagOptions }) => {
 						backgroundColor: tag.color,
 						padding: '2px 5px 2px 5px'
 					}}
+					key={tag}
 				>
 					{tag.name}
 				</span>
@@ -55,6 +58,7 @@ const TagManager = ({ person, tagOptions }) => {
 					<div style={{ width: '90%', display: 'flex' }}>
 						<Autocomplete
 							onChange={(event, newValue) => {
+								console.log(newValue)
 								if (newValue && newValue.inputValue) {
 									setTagInput({name: newValue.inputValue})
 									return

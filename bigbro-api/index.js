@@ -1,4 +1,5 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 const app = express()
 var cors = require('cors')
 const moment = require('moment')
@@ -7,12 +8,16 @@ var neo4j = require('neo4j-driver')
 const dotenv = require('dotenv')
 dotenv.config()
 
+// IMPORT
+// LOAD CSV WITH HEADERS FROM 'file:///GRANDPeople.csv' as row CREATE (n:Person) set n = row, n.Id = apoc.create.uuid()
+
 var driver = neo4j.driver(
 	'bolt://localhost:7687',
 	neo4j.auth.basic(process.env.NEO4J_USERNAME, process.env.NEO4J_PASSWORD)
 )
 
 app.use(cors());
+app.use(bodyParser.json());
 
 app.get('/people', (req, res) => {
 	let people = []
@@ -33,7 +38,7 @@ app.post('/people/tag', (req, res) => {
 	if(!req.color) {
 		req.color = "#" + Math.random().toString(16).slice(2, 8)
 	}
-	console.log(req)
+	console.log(req.body.name, req.body.personId)
 	// let session = driver.session()
 	// session
 	// 	.run(`MATCH (n:Person {id: ${req.personId}}) MERGE (t:Tag {name: ${req.name}, data: ${moment().toString()}})<-[:HAS_TAG]-(p)`)
