@@ -26,7 +26,6 @@ const TagManager = ({ person, tagOptions }) => {
 	const classes =useStyles()
 
 	const saveTag = () => {
-		console.log({...tagInput})
 		axios
 		.post('http://localhost:3000/people/tag', {...tagInput, personId: person.Id}, config).then(response => {
 			console.log("success :)")
