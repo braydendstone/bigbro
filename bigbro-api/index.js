@@ -38,6 +38,7 @@ app.post('/people/tag', (req, res) => {
 	if(!req.color) {
 		req.color = "#" + Math.random().toString(16).slice(2, 8)
 	}
+	console.log("add tag")
 	// let session = driver.session()
 	// session
 	// 	.run(`MATCH (n:Person {id: ${req.personId}}) MERGE (t:Tag {name: ${req.name}, data: ${moment().toString()}})<-[:HAS_TAG]-(p)`)
