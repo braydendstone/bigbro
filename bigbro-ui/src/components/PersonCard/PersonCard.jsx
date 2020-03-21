@@ -18,7 +18,7 @@ const PersonCard = ({ person, tagOptions }) => {
 			}}
 		>
 			<CardContent>
-				<Typography variant='h6' component='h2' color='#ffffff' align='left' nowrap>
+				<Typography variant='h6' component='h2' color='#ffffff' align='left'>
 					{person.name.split(',')[1] + ' ' + person.name.split(',')[0]}
 				</Typography>
 				<Typography gutterBottom color='#ee4540' align='left'>

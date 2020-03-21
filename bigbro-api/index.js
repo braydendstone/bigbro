@@ -35,21 +35,21 @@ app.get('/people', (req, res) => {
 })
 
 app.post('/people/tag', (req, res) => {
-	if(!req.color) {
-		req.color = "#" + Math.random().toString(16).slice(2, 8)
+	let { name, color, personName } = req.body
+	if(!color) {
+		color = "#" + Math.random().toString(16).slice(2, 8)
 	}
-	console.log("add tag")
-	// let session = driver.session()
-	// session
-	// 	.run(`MATCH (n:Person {id: ${req.personId}}) MERGE (t:Tag {name: ${req.name}, data: ${moment().toString()}})<-[:HAS_TAG]-(p)`)
-	// 	.then(result => {
-	// 		people = result.records.map(record => record._fields[0])
-	// 		res.send(people)
-	// 	})
-	// 	.catch(error => {
-	// 		console.log(error)
-	// 	})
-	// 	.then(() => session.close())
+	let session = driver.session()
+	session
+		.run(`MATCH (p:Person {name: '${personName}'}) MERGE (t:Tag {name: '${name}', color: '${color}'})<-[:HAS_TAG {date: '${moment().toString()}'}]-(p)`)
+		.then(result => {
+			res.send(true)
+		})
+		.catch(error => {
+			console.log(error)
+			res.status(500).send(error)
+		})
+		.then(() => session.close())
 })
 
 app.get('/tags', (req, res) => {

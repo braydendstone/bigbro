@@ -23,12 +23,11 @@ var config = {
 const TagManager = ({ person, tagOptions }) => {
 	const [addingTag, setAddingTag] = useState(false)
 	const [tagInput, setTagInput] = useState('')
-	const classes =useStyles()
+	const classes = useStyles()
 
 	const saveTag = () => {
 		axios
-		.post('http://localhost:3000/people/tag', {...tagInput, personId: person.Id}, config).then(response => {
-			console.log("success :)")
+		.post('http://localhost:3000/people/tag', { ...tagInput, personName: person.name}, config).then(response => {
 			setAddingTag(false)
 		}).catch(error => {
 			console.error(error)
@@ -62,7 +61,7 @@ const TagManager = ({ person, tagOptions }) => {
 									setTagInput({name: newValue.inputValue})
 									return
 								}
-								setTagInput({name: newValue})
+								else if (newValue) setTagInput({...newValue})
 							}}
 							filterOptions={(options, params) => {
 								const filtered = filter(options, params)
@@ -94,7 +93,7 @@ const TagManager = ({ person, tagOptions }) => {
 							renderInput={params => <TextField {...params} className={classes.tagInput} label='Tag' variant='filled' />}
 						/>
 
-						<Button style={{ color: '#fff', width: '30%', backgroundColor: '#ee4540' }} onClick={() => saveTag()}>
+						<Button disabled={!tagInput.name} style={{ color: '#fff', width: '30%', backgroundColor: '#ee4540' }} onClick={() => saveTag()}>
 							Add
 						</Button>
 					</div>

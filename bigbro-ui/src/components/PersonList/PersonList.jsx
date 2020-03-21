@@ -5,6 +5,8 @@ import PersonCard from '../PersonCard/PersonCard'
 import './PersonList.css'
 import axios from 'axios'
 
+import { PeopleProvider } from '../../context/PeopleContext'
+
 const columns = [
 	{
 		Header: 'Name',
@@ -29,8 +31,8 @@ const columns = [
 ]
 
 var config = {
-    headers: {'Access-Control-Allow-Origin': '*'}
-};
+	headers: { 'Access-Control-Allow-Origin': '*' }
+}
 
 const PersonList = () => {
 
@@ -40,22 +42,12 @@ const PersonList = () => {
 	const [filter, setFilter] = useState('')
 
 	useEffect(() => {
-		// Make a request for a user with a given ID
 		axios
-			.get('http://localhost:3000/people/', config)
+			.get('http://localhost:3000/tags', config)
 			.then(response => {
-				// handle success
-				setFullPeopleData(response.data || [])
+				setAllTags(response.data || [])
 			})
 			.catch(error => {
-				// handle error
-				console.error(error)
-			})
-
-		axios
-			.get('http://localhost:3000/tags', config).then(response => {
-				setAllTags(response.data || [])
-			}).catch(error => {
 				console.error(error)
 			})
 	}, [])
@@ -67,17 +59,19 @@ const PersonList = () => {
 	}, [filter, fullPeopleData])
 
 	return (
-		<div>
-			<div className='header'>
-				<input onChange={e => setFilter(e.target.value)} />
+		<PeopleProvider people={peopleData}>
+			<div>
+				<div className='header'>
+					<input onChange={e => setFilter(e.target.value)} />
+				</div>
+				<div className='cardsContainer'>
+					{peopleData.map(person => (
+						<PersonCard key={person.name} person={person} tagOptions={allTags} />
+					))}
+					{/* <ReactTable data={data.Person} columns={columns} /> */}
+				</div>
 			</div>
-			<div className='cardsContainer'>
-				{peopleData.map(person => (
-					<PersonCard key={person.name} person={person} tagOptions={allTags}/>
-				))}
-				{/* <ReactTable data={data.Person} columns={columns} /> */}
-			</div>
-		</div>
+		</PeopleProvider>
 	)
 }
 export default PersonList
