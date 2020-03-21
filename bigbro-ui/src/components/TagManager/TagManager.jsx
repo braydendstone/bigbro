@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import axios from 'axios'
 import { Button, TextField } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete'
 import './TagManager.css'
+
+import {PeopleContext} from '../../context/PeopleContext'
 
 const useStyles = makeStyles({
 	tagInput: {
@@ -21,6 +23,8 @@ var config = {
 };
 
 const TagManager = ({ person, tagOptions }) => {
+	const { fetchPeople } = useContext(PeopleContext)
+
 	const [addingTag, setAddingTag] = useState(false)
 	const [tagInput, setTagInput] = useState('')
 	const classes = useStyles()
@@ -29,6 +33,7 @@ const TagManager = ({ person, tagOptions }) => {
 		axios
 		.post('http://localhost:3000/people/tag', { ...tagInput, personName: person.name}, config).then(response => {
 			setAddingTag(false)
+			fetchPeople()
 		}).catch(error => {
 			console.error(error)
 		})
